@@ -3,16 +3,10 @@
  * @version 20.04.2021
  */
 public class Vigenere{
-    /**
-     * 
-     */
+    
     public static final char[] ALPHABET = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
-    /**
-     * 
-     * @param chars
-     * @return
-     */
+    
     public static char[] shiftChar(char[] chars){
         char[] output = new char[chars.length];
         for(int i = 0;i < chars.length - 1;i++){
@@ -22,10 +16,7 @@ public class Vigenere{
         return output;
     }
     
-    /**
-     * 
-     * @return
-     */
+    
     public static char[][] setTable(){
         char[][] table = new char[26][26];
         char[] cop = ALPHABET;
@@ -38,10 +29,10 @@ public class Vigenere{
         return table;
     }
 
-    public static int getIndex(char[] chars, char value){
-        for (int i = 0; i < chars.length; i++) {
-            if(chars[i] == value){
-                return i + 1;
+    public static int getIndex(char value){
+        for (int i = 0; i < ALPHABET.length; i++) {
+            if(ALPHABET[i] == value){
+                return i;
             }
         }
         return -1;
@@ -54,17 +45,21 @@ public class Vigenere{
             newChars[i] = chars[0];
             chars = shiftChar(chars);
         }
-
-        for (int i = 0; i < newChars.length - 1; i++) {
-            System.out.print(chars[i]);
-        }
-
-        return newChars.toString();
+        return new String(newChars);
     }
 
+    public static String getCypherChars(String text, String key){
+        char[] k = getFullKey(key, text.length()).toCharArray();
+        char[] t = text.toCharArray();
+        char[] output = new char[text.length()];
+        char[][] table = setTable();
+        for (int i = 0; i < text.length(); i++) {
+            output[i] = table[getIndex(t[i])][getIndex(k[i])];
+        }
+        return new String(output);
+    }
 
     public static void main(String[] args) {
-        /*
         char[][] prova = setTable();
         for (int i = 0; i < prova.length; i++) {
             for (int j = 0; j < prova.length; j++) {
@@ -72,12 +67,9 @@ public class Vigenere{
             }
             System.out.println();
         }
-        */
-        String text = "CIAOMICHIAMONICOLA";
-        String chiave = "Verme";
-
-        getFullKey(chiave,text.length());
-        //System.out.println(getFullKey(chiave,text.length()));
-        
+        String text = "RAPPORTOIMMEDIATO";
+        String chiave = "VERME";
+        System.out.println(getFullKey(chiave,text.length()));
+        System.out.println(getCypherChars(text, chiave));
     }
 }
