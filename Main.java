@@ -1,6 +1,6 @@
 
 /**
- *  Gay
+ * 
  */
 public class Main{
 

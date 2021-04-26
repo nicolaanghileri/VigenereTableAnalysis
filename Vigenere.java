@@ -4,7 +4,7 @@
  * @author nicolaanghileri
  * @version 20.04.2021
  */
-public class Vigenere{
+public class Vigenere {
 
     /**
      * 
@@ -16,24 +16,45 @@ public class Vigenere{
      */
     private String key;
 
-    public Vigenere(String text, String key){
+    /**
+     * 
+     * @param text
+     * @param key
+     */
+    public Vigenere(String text, String key) {
         this.text = text;
         this.key = key;
     }
 
-    public void setText(String text){
+    /**
+     * 
+     * @param text
+     */
+    public void setText(String text) {
         this.text = text.toUpperCase();
     }
 
-    public void setkey(String key){
+    /**
+     * 
+     * @param key
+     */
+    public void setkey(String key) {
         this.key = key.toUpperCase();
     }
 
-    public String getText(){
-        return  this.text;
+    /**
+     * 
+     * @return
+     */
+    public String getText() {
+        return this.text;
     }
 
-    public String getKey(){
+    /**
+     * 
+     * @return
+     */
+    public String getKey() {
         return this.key;
     }
 
@@ -42,7 +63,6 @@ public class Vigenere{
      */
     public static final char[] ALPHABET = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
             'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-
 
     /**
      * 
@@ -91,10 +111,10 @@ public class Vigenere{
     /**
      * 
      */
-    public static String getFullKey(String key, int leng) {
-        char[] chars = key.toCharArray();
-        char[] newChars = new char[leng];
-        for (int i = 0; i < leng; i++) {
+    public String getFullKey() {
+        char[] chars = this.key.toCharArray();
+        char[] newChars = new char[text.length()];
+        for (int i = 0; i < text.length(); i++) {
             newChars[i] = chars[0];
             chars = shiftChar(chars);
         }
@@ -104,8 +124,8 @@ public class Vigenere{
     /**
      * 
      */
-    public String getCypherChars() {
-        char[] k = getFullKey(this.key, this.text.length()).toCharArray();
+    public String getCypherChars() {//encript
+        char[] k = getFullKey().toCharArray();
         char[] t = this.text.toCharArray();
         char[] output = new char[this.text.length()];
         char[][] table = setTable();
@@ -115,26 +135,27 @@ public class Vigenere{
         return new String(output);
     }
 
-    public static String getClearChars(String text, String key){
-        
-        
-        
-        
-        return "Ciao";
+    public String getClearChars(String output) {//decript
+        char[] clear = new char[this.text.length()];
+        char[] txt = output.toCharArray();
+        char[] ky = getFullKey().toCharArray();
+
+       // System.out.println("LENGHTTTTT" + clear.length + " " + txt.length + " " + ky.length);
+
+        for (int i = 0; i < clear.length; i++) {
+            int calc = getIndex(txt[i]) - getIndex(ky[i]);
+           // System.out.println(getIndex(txt[i]) + "-" + getIndex(ky[i]) + "="+ calc);
+            if(calc >= 0){
+                clear[i] = ALPHABET[calc];
+            }else{
+                clear[i] = ALPHABET[calc+=26];
+            }
+        }
+        return new String(clear);
     }
 
     public static void main(String[] args) {
-        /*
-        char[][] prova = setTable();
-        for (int i = 0; i < prova.length; i++) {
-            for (int j = 0; j < prova.length; j++) {
-                System.out.print(prova[i][j]);
-            }
-            System.out.println();
-        }
-        */
-        Vigenere v = new Vigenere("RAPPORTOIMMEDIATO", "VERME");
-
-        System.out.println(v.getCypherChars());
+        Vigenere vg = new Vigenere("RAPPORTOIMMEDIATO", "VERME");
+        System.out.println("OUT" + vg.getClearChars("MEGBSMXFUQHIUUEOS"));
     }
 }
